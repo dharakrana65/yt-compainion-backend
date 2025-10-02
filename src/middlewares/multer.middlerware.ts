@@ -4,7 +4,7 @@ import path from 'path';
 const storage = multer.diskStorage({
   destination: './uploads/',
   filename: function(req, file, cb) {
-    cb(null, + Date.now() + '-' +file.originalname.split('.')[0] + '-' + path.extname(file.originalname));
+    cb(null, + Date.now() + '-' +file.originalname.split('.')[0] + path.extname(file.originalname));
   }
 });
 

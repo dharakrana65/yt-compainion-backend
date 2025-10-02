@@ -17,7 +17,7 @@ const pythonPath = 'E:\\Dharak-whisper-model\\whisper\\venv\\Scripts\\python.exe
 const scriptPath = 'E:\\Dharak-whisper-model\\whisper\\stt.py';
 const filePath = "E:\\Dharak-whisper-model\\whisper\\modi.mp4";
 const language = "en";
-router.get("/transcription", (req, res) => {
+router.get("/transcription", (req: Request, res:Response,next: NextFunction) => {
   // headers for streaming
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   res.setHeader("Transfer-Encoding", "chunked");
