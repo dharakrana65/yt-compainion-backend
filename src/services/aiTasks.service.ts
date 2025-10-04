@@ -28,12 +28,12 @@ interface GenericChatResponse {
   };
 }
 
-export const generateResponse = async (): Promise<string | undefined> => {
+export const generateResponse = async (prompt :string): Promise<string | undefined> => {
   try {
 
 
     // Build prompt
-    const prompt ='say joke on programing';
+    // const prompt ='say joke on programing';
 
     // Model + serving mode
     const modelId = "ocid1.generativeaimodel.oc1.us-chicago-1.amaaaaaask7dceyajqi26fkxly6qje5ysvezzrypapl7ujdnqfjq6hzo2loq"; // move OCID into config
