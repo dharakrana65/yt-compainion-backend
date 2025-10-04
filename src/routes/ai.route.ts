@@ -122,5 +122,72 @@ ${JSON.stringify(transcription, null, 2)}
   }
 })
 
+router.post("/shorts", async (req: Request, res: Response, next: NextFunction) => {
+  const { transcription } = req.body
+const prompt = `
+You are an expert video content editor and social media strategist. 
+I am providing a full video transcription with timestamps(MM:SS.mmm) in JSON format. 
+Your task is to suggest **short video clips (shorts) that are meaningful, engaging, and suitable for social media**.
+
+Rules:
+- The transcription is provided as a JSON array under the key "transcription".
+- Each item has "start", "end", and "text".
+- Generate shorts that are **between 20 to 60 seconds long** each.
+- Each short should contain meaningful, self-contained content that makes sense when viewed independently.
+- Each segment must include:
+  - a unique "short_id" (e.g., "short_1", "short_2", …)
+  - "start" time in HH:MM:SS.mmm format
+  - "end" time in HH:MM:SS.mmm format
+  - "text" content of the short
+- Choose **2-3 shorts** for the entire transcription depending on the length of the content.
+- Focus on **highly engaging or informative parts** of the video.
+- Avoid creating very short clips (<20 seconds) unless the content is extremely important.
+- Only output **JSON**, nothing else.
+
+Transcription JSON:
+${JSON.stringify(transcription, null, 2)}
+`;
+
+
+
+  const response = await generateResponse(prompt);
+
+let shorts: any = [];
+
+console.log(response)
+if (response) {
+  try {
+    // Remove any markdown ```json or ``` around the response
+    const cleaned = response
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    // Parse the cleaned string into a proper object/array
+    shorts = JSON.parse(cleaned);
+
+    res.status(200).json({
+      success: true,
+      data: shorts,
+      message: "Shorts generated successfully"
+    });
+  } catch (err) {
+    console.error("Error parsing AI response JSON:", err);
+    res.status(500).json({
+      success: false,
+      data: null,
+      message: "Failed to parse AI response"
+    });
+  }
+} else {
+  res.status(500).json({
+    success: false,
+    data: null,
+    message: "Shorts generation failed"
+  });
+}
+
+})
+
 
 export default router
